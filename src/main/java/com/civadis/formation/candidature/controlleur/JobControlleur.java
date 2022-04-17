@@ -1,5 +1,8 @@
 package com.civadis.formation.candidature.controlleur;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,8 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.civadis.formation.candidature.controlleur.payload.JobDto;
 import com.civadis.formation.candidature.model.Job;
 import com.civadis.formation.candidature.repository.JobRepository;
 import com.civadis.formation.candidature.service.JobService;
@@ -35,17 +40,23 @@ public class JobControlleur {
 	  @ApiResponse(responseCode = "404", description = "Job not found", 
 	    content = @Content) })
 	@GetMapping("/{id}")
-    public Job findById(@PathVariable long id) {
+    public JobDto findById(@PathVariable long id) {
 		
 			
 			return null;
-		}
+	 }
+	@GetMapping("/")
+    public List<JobDto> findAll(@RequestParam("status") Optional<String> status,
+    		@RequestParam("offset") Optional<Long> offset,
+    		@RequestParam("limit") Optional<Long> limit) {
+		
+			
+			return null;
+	 }
 	 @PostMapping("/")
-	 @Operation(summary = "Create a Job by its id")
-	 public  ResponseEntity<Job> createJob(@RequestBody final Job job) {
+	 @Operation(summary = "Create or update a Job by its id")
+	 public  ResponseEntity<JobDto> createJob(@RequestParam("id") Optional<Long> id,@RequestBody final JobDto JobDto) {
+		    return null;
 		
-		 
-		    return ResponseEntity.ok(jobService.createJob(job));
-		
-	}
+	 }
 }

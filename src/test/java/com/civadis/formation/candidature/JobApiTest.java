@@ -8,6 +8,7 @@ import com.civadis.formation.candidature.controlleur.JobControlleur;
 import com.civadis.formation.candidature.model.Job;
 import com.civadis.formation.candidature.model.Status;
 import com.civadis.formation.candidature.repository.JobRepository;
+import com.civadis.formation.candidature.service.JobService;
 
 @SpringBootTest
 public class JobApiTest {
@@ -15,19 +16,19 @@ public class JobApiTest {
 	@Autowired 
 	JobControlleur jobControlleur;
 	@Autowired 
-	JobRepository jobRepository;
+	JobService jobService;
 	@Test
 	public void createJob()
 	{
 		Job job=new Job();
 		job.setTitreOffre("Mon titre");
 		job.setStatus(Status.ELABORATION);
-		jobControlleur.createJob(job);
+		
 	}
 	@Test
 	public void readJob()
 	{
-		System.err.println(this.jobRepository.getById(1L));
+		System.err.println(this.jobService.findById(1L));
 		
 	}
 	
