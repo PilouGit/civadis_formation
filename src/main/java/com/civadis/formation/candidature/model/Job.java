@@ -80,6 +80,24 @@ public class Job {
 	public void setStatus(Status status) {
 		this.status = status;
 	}
+	public Engagement getEngagement() {
+		return engagement;
+	}
+	public void setEngagement(Engagement engagement) {
+		this.engagement = engagement;
+	}
+	public JobDetail getJobDetail() {
+		return jobDetail;
+	}
+	public void setJobDetail(JobDetail jobDetail) {
+		this.jobDetail = jobDetail;
+	}
+	public Set<JobRating> getRatings() {
+		return ratings;
+	}
+	public void setRatings(Set<JobRating> ratings) {
+		this.ratings = ratings;
+	}
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

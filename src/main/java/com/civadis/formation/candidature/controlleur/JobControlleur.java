@@ -34,7 +34,7 @@ public class JobControlleur {
 	@ApiResponses(value = { 
 	  @ApiResponse(responseCode = "200", description = "Found the Jon", 
 	    content = { @Content(mediaType = "application/json", 
-	      schema = @Schema(implementation = Job.class)) }),
+	      schema = @Schema(implementation = JobDto.class)) }),
 	  @ApiResponse(responseCode = "400", description = "Invalid id supplied", 
 	    content = @Content), 
 	  @ApiResponse(responseCode = "404", description = "Job not found", 
@@ -46,6 +46,8 @@ public class JobControlleur {
 			return null;
 	 }
 	@GetMapping("/")
+	 @ApiResponse(responseCode = "200", description = "Found the Jon", 
+	    content = { @Content(mediaType = "application/json")})
     public List<JobDto> findAll(@RequestParam("status") Optional<String> status,
     		@RequestParam("offset") Optional<Long> offset,
     		@RequestParam("limit") Optional<Long> limit) {
@@ -59,4 +61,5 @@ public class JobControlleur {
 		    return null;
 		
 	 }
+	 
 }
