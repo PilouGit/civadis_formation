@@ -1,5 +1,6 @@
 package com.civadis.formation.candidature.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -81,19 +82,23 @@ public class Candidature {
 	private String prenom;
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "address_id", referencedColumnName = "id")
-	private Address address;
+	private Address address=new Address();
 	@Column(name = "LINKEDIN",columnDefinition="TEXT")
 	private String linkedin;
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "cv_id", referencedColumnName = "id")
-	private DatabaseFile cv;
+	private DatabaseFile cv=null;
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "motivation_id", referencedColumnName = "id")
-	private DatabaseFile motivation;
+	private DatabaseFile motivation=null;
 	
 	@OneToMany(mappedBy = "candidature")
-    Set<JobRating> ratings;
+    Set<JobRating> ratings=new HashSet<>();
 
+	public Candidature()
+	{
+		
+	}
 	public Long getId() {
 		return id;
 	}

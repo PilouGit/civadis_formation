@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.civadis.formation.candidature.controlleur.payload.CandidatureDto;
 import com.civadis.formation.candidature.controlleur.payload.JobDto;
+import com.civadis.formation.candidature.model.Candidature;
 import com.civadis.formation.candidature.model.DatabaseFile;
+import com.civadis.formation.candidature.service.CandidatMapper;
 import com.civadis.formation.candidature.service.CandidatureService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,13 +35,36 @@ import io.swagger.v3.oas.annotations.Operation;
 public class CandidatControlleur {
 
 
-	@Autowired CandidatureService service;
+	 @Autowired CandidatureService service;
+	 @Autowired CandidatMapper candidatMapper;
 	
 	 @PostMapping("/")
 	 @Operation(summary = "Create or update a Job by its id")
-	 public  ResponseEntity<CandidatureDto> createCandidature(@RequestParam("id") Optional<Long> id,@RequestBody final CandidatureDto JobDto) {
-		   
-		 return null;
+	 @Transactional
+	 public  ResponseEntity<CandidatureDto> createCandidature(@RequestParam("id") Optional<Long> id,@RequestBody final CandidatureDto candidatureDto) {
+		 
+		 Candidature candidature=null;
+		 if (id.isEmpty())
+		 {
+			 candidature=candidatMapper.simpleMapping( candidatureDto,candidature);
+			 candidature.setId(null);
+		 }else
+		 {
+			 Optional<Candidature> optionnalCandidature = service.getCandidature(id.get());
+			 if (optionnalCandidature.isEmpty())
+			 {
+				 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			 }else
+			 {
+				 candidature=optionnalCandidature.get();
+				 candidature=this.candidatMapper.simpleMapping(candidatureDto,candidature);
+			 }
+			 
+		 }
+		 candidature=service.createOrUpdateCandidature(candidature);
+		 
+		 
+		 return ResponseEntity.ok(this.candidatMapper.simpleMapping(candidature, null));
 		
 	 }
 
@@ -53,7 +79,7 @@ public class CandidatControlleur {
 	 @GetMapping(path = "/files")
 	 public ResponseEntity<List<CandidatureService.TypeFile>> fileInfo(@RequestParam("id") Long id)  {
 		 
-		 return null;
+		 return ResponseEntity.ok(this.service.getTypeFile(id));
 		 
 	 }
 			

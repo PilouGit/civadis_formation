@@ -1,5 +1,7 @@
 package com.civadis.formation.candidature.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,20 @@ public class CandidatureService {
 	{
 		return repository.save(candidature);
 	}
+	@Transactional(readOnly=true)
+	public List<TypeFile> getTypeFile(Long id)
+	{
+		List<TypeFile> result=new ArrayList<>();
+		if (this.repository.hasCv(id))
+		{
+			result.add(TypeFile.cv);
+		}
+		if (this.repository.hasMotivation(id))
+		{
+			result.add(TypeFile.motivation);
+		}
+		return result;
+	}
 	
 	@Transactional(readOnly=true)
 	public DatabaseFile getCv(Long id) {
@@ -47,6 +63,12 @@ public class CandidatureService {
 			
 		}
 		return null;
+	}
+	@Transactional(readOnly=true)
+	public Optional<Candidature> getCandidature(Long id) {
+		Optional<Candidature> optionnalCandidature = this.repository.findById(id);
+		return optionnalCandidature; 
+		
 	}
 	
 	
