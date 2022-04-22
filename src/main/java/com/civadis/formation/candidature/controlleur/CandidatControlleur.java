@@ -1,6 +1,7 @@
 package com.civadis.formation.candidature.controlleur;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,10 +71,26 @@ public class CandidatControlleur {
 
 	 @PostMapping("/files/{typeFile}")
 	 @Operation(summary = "Create or update a Job by its id")
+	 @Transactional
 	 public  ResponseEntity<CandidatureDto> uploadFile(@PathVariable("typeFile") CandidatureService.TypeFile mode,@RequestParam("id") Long id,@RequestParam("file") MultipartFile file) {
 		 
-		 return null;
-		
+		 try {
+			byte [] data=file.getBytes();
+	
+		 String fileName=file.getName();
+		 String contentType=file.getContentType();
+		 Candidature candidature = this.service.saveDatabaseFile(id, mode, fileName, contentType, data);
+		 if (candidature!=null)
+		 {
+			 return ResponseEntity.ok(this.candidatMapper.simpleMapping(candidature, null));
+		 }else
+		 {
+			  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			 
+		 }
+			} catch (IOException e) {
+				 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}	
 	 }
 	 
 	 @GetMapping(path = "/files")
@@ -84,6 +101,7 @@ public class CandidatControlleur {
 	 }
 			
 	 @GetMapping(path = "/files/{typeFile}")
+	 @Transactional
 	 public ResponseEntity<Resource> download(@PathVariable("typeFile") CandidatureService.TypeFile mode,@RequestParam("id") Long id)  {
 		 
 		 DatabaseFile databaseFile;
