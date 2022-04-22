@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.civadis.formation.candidature.controlleur.payload.JobDto;
+import com.civadis.formation.candidature.controlleur.payload.StatusDto;
 import com.civadis.formation.candidature.model.Job;
 import com.civadis.formation.candidature.repository.JobRepository;
 import com.civadis.formation.candidature.service.JobService;
@@ -48,7 +49,7 @@ public class JobControlleur {
 	@GetMapping("/")
 	 @ApiResponse(responseCode = "200", description = "Found the Jon", 
 	    content = { @Content(mediaType = "application/json")})
-    public List<JobDto> findAll(@RequestParam("status") Optional<String> status,
+    public List<JobDto> findAll(@RequestParam("status") Optional<StatusDto> status,
     		@RequestParam("offset") Optional<Long> offset,
     		@RequestParam("limit") Optional<Long> limit) {
 		
